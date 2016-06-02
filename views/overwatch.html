@@ -1,0 +1,26 @@
+<table class="table table-inverse">
+    <thead>
+    <tr>
+        <th ng-click="currentSort = 'player.name'">Player</th>
+        <th ng-click="currentSort = 'player.level'">Level</th>
+        <th ng-click="currentSort = 'heroStats[0].kda'">KDA</th>
+        <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
+        <th ng-click="currentSort = 'heroStats[0].gamesPlayed'">Games Played</th>
+        <th ng-click="currentSort = 'heroStats[0].avgGold'">Avg Golds Per Game</th>
+        <th ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Game Elims</th>
+        <th ng-click="currentSort = 'mostPlayed'">Favorite Hero</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="entity in Private.overwatchA | orderBy: '-'+currentSort">
+        <th title="{{entity | json}}">{{entity.player.name}}</th>
+        <td>{{entity.player.level}}</td>
+        <td>{{entity.heroStats[0].kda}}</td>
+        <td>{{entity.heroStats[0].winPercentage | percentage:100}}</td>
+        <td>{{entity.heroStats[0].gamesPlayed}}</td>
+        <td>{{entity.heroStats[0].avgGold | number:2}}</td>
+        <td>{{entity.careerStats[0].mostGameEliminations}}</td>
+        <td>{{entity.mostPlayed}}</td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,6 @@
+.idea/*
+node.exe
+.git.old/*
+img/Thumbs.db
+node_modules/*
+lib/.idea/*

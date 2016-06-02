@@ -1,0 +1,16 @@
+{
+  "name": "edenoverwatch",
+  "version": "0.1.0",
+  "description": "EdenOverwatch",
+  "dependencies": {
+    "express": "*",
+    "angular": "*",
+    "socket.io": "*",
+    "bootstrap": "4.0.0-alpha.2",
+    "tether": "*",
+    "jquery": "*",
+    "font-awesome": "*",
+    "moment": "*",
+    "chance": "*"
+  }
+}

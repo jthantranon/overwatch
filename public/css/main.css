@@ -1,0 +1,29 @@
+:root {
+    --primary-color: #ff9800;
+    /*black*/
+    /*--color1: #E82F2B;*/
+    /*--color2: #A51A19;*/
+    /*--color3: #58110B;*/
+    /*--color4: #A5625F;*/
+    /*--color5: #0C0B0B;*/
+    /*WHITE*/
+    /*--color1: #F2F1F3;*/
+    /*--color2: #89878B;*/
+    /*--color3: #F48E91;*/
+    /*--color4: #F22F28;*/
+    /*--color5: #57575C;*/
+    --color1: #5bc0de;
+    --color2: #F48E91;
+    --color3: #ff9800;
+    --color4: #5e6f7c;
+    --color5: #57575C;
+}
+
+.show-bg {
+    background-color: black;
+    background-image: url("../img/edenLogo.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 860px;
+}
