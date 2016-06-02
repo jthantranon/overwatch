@@ -17,6 +17,11 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     };
 
     $scope.currentSort = 'player.level';
+    $scope.currentSortDir = '-';
+    $scope.changeSortDir = () => {
+        $scope.currentSortDir = $scope.currentSortDir === '-'? '' : '-';
+    };
+    $scope.filter = 'All';
 
     $scope.getModel = function(model){
         return model[Object.keys(model)[0]]

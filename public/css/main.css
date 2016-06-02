@@ -27,3 +27,8 @@
     background-position: center;
     background-size: 860px;
 }
+
+.profileLink {
+    color: grey;
+    font-size: .65em;
+}
