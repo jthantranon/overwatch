@@ -1,4 +1,6 @@
 Filter: <span ng-click="filter = 'All'">All</span> | <span ng-click="filter = 'Gamblit'">Gamblit</span> | <span ng-click="filter = 'JFT Friends'">JFT Friends</span> | <span ng-click="filter = 'Winky'">Winky</span>
+ --------
+<a ng-click="updateAll()">Update All Data</a>
 <table class="table table-inverse">
     <thead>
     <tr ng-click="changeSortDir()">
@@ -11,6 +13,7 @@ Filter: <span ng-click="filter = 'All'">All</span> | <span ng-click="filter = 'G
         <th ng-click="currentSort = 'heroStats[0].avgGold'">Avg Golds Per Game</th>
         <th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals Per Game</th>
         <th ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Elims in a Game</th>
+        <th ng-click="currentSort = 'player.lastUpdated'">Last Updated</th>
         <!--<th ng-click="currentSort = 'player.tags'">Tags</th>-->
         <th ng-click="currentSort = 'mostPlayed'">Favorite Hero</th>
     </tr>
@@ -33,7 +36,7 @@ Filter: <span ng-click="filter = 'All'">All</span> | <span ng-click="filter = 'G
         <td>{{entity.heroStats[0].avgGold | number:2}}</td>
         <td>{{entity.heroStats[0].avgMedal | number:2}}</td>
         <td>{{entity.careerStats[0].mostGameEliminations}}</td>
-        <!--<td>{{entity.player.tags}}</td>-->
+        <td class="profileLink">{{entity.player.lastUpdated}}</td>
         <td>{{entity.mostPlayed}}</td>
     </tr>
     </tbody>

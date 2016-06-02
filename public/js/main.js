@@ -16,6 +16,10 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         return Object.keys(obj).length || 0;
     };
 
+    $scope.updateAll = () => {
+        socket.emit('UpdateAll')
+    };
+
     $scope.currentSort = 'player.level';
     $scope.currentSortDir = '-';
     $scope.changeSortDir = () => {
