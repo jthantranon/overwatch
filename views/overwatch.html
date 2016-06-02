@@ -9,8 +9,9 @@ Filter: <span ng-click="filter = 'All'">All</span> | <span ng-click="filter = 'G
         <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
         <th ng-click="currentSort = 'heroStats[0].gamesPlayed'">Games Played</th>
         <th ng-click="currentSort = 'heroStats[0].avgGold'">Avg Golds Per Game</th>
-        <th ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Game Elims</th>
-        <th ng-click="currentSort = 'player.tags'">Tags</th>
+        <th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals Per Game</th>
+        <th ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Elims in a Game</th>
+        <!--<th ng-click="currentSort = 'player.tags'">Tags</th>-->
         <th ng-click="currentSort = 'mostPlayed'">Favorite Hero</th>
     </tr>
     </thead>
@@ -30,8 +31,9 @@ Filter: <span ng-click="filter = 'All'">All</span> | <span ng-click="filter = 'G
         <td>{{entity.heroStats[0].winPercentage | percentage:100}}</td>
         <td>{{entity.heroStats[0].gamesPlayed}}</td>
         <td>{{entity.heroStats[0].avgGold | number:2}}</td>
+        <td>{{entity.heroStats[0].avgMedal | number:2}}</td>
         <td>{{entity.careerStats[0].mostGameEliminations}}</td>
-        <td>{{entity.player.tags}}</td>
+        <!--<td>{{entity.player.tags}}</td>-->
         <td>{{entity.mostPlayed}}</td>
     </tr>
     </tbody>
