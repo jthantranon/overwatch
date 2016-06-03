@@ -9,8 +9,8 @@
 <table class="table table-inverse">
     <thead>
     <tr ng-click="changeSortDir()">
-        <th ng-click="currentSort = 'player.name'">BattleTag</th>
-        <th ng-click="currentSort = 'player.realName'">Name</th>
+        <th ng-click="currentSort = 'player.realName'">BattleTag / Name</th>
+        <!--<th ng-click="currentSort = 'player.realName'">Name</th>-->
         <th ng-click="currentSort = 'player.level'">Level</th>
         <th ng-click="currentSort = 'heroStats[0].kda'">KDA</th>
         <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
@@ -31,14 +31,15 @@
         ng-repeat="entity in Private.overwatchA | orderBy: currentSortDir+currentSort">
         <th>
             <img class="portrait" ng-src="{{'https://static.watcher.gg/portraits/' + entity.player.portrait + '.png'}}">
-            {{entity.player.name}}
+            {{entity.player.name}}<br>
+            {{entity.player.realName}}
             <span class="profileLink" >
                 Profiles:
                 <a target="_blank" href="{{'https://watcher.gg/profile/pc/us/'+entity.player.name.split('#')[0]+'%23'+entity.player.name.split('#')[1]}}">watcher</a> |
                 <a target="_blank" href="{{'https://playoverwatch.com/en-us/career/pc/us/'+entity.player.name.split('#')[0]+'-'+entity.player.name.split('#')[1]}}">bnet</a>
             </span>
         </th>
-        <td>{{entity.player.realName}}</td>
+        <!--<td>{{entity.player.realName}}</td>-->
         <td ng-class="highlightHighest('level',                 entity.player.level,                        entity.player.tags)">{{entity.player.level}}</td>
         <td ng-class="highlightHighest('kda'  ,                 entity.heroStats[0].kda,                    entity.player.tags)">{{entity.heroStats[0].kda}}</td>
         <td ng-class="highlightHighest('winPercentage',         entity.heroStats[0].winPercentage,          entity.player.tags)">{{entity.heroStats[0].winPercentage | percentage:100}}</td>

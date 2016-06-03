@@ -53,6 +53,8 @@
 
 .portrait {
     width: 50px;
+    float: left;
+    margin-right: 10px;
 }
 
 .character {
