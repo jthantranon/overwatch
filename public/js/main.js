@@ -38,6 +38,8 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     $scope.stdName = (name) => {
         if(name === 'Torbjörn') name = 'torbjorn';
         if(name === 'Lúcio') name = 'lucio';
+        if(name === 'Soldier: 76') name = 'soldier-76';
+
         return name.toLowerCase();
     };
 
