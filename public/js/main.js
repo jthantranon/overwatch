@@ -7,25 +7,50 @@ var Tools = COMMON.getInstance().tools;
 
 var socket = io();
 
-var app = angular.module("theApp", []).controller("theController", ["$scope","$http", "$log", function($scope, $http, $log){
+var app = angular.module("theApp", []).controller("theController", ["$scope","$http", "$log", "$location", function($scope, $http, $log, $location){
     $scope.moment = moment;
     $scope.tableFilter = 'all';
     $scope.Tools = Tools;
     $scope.$log = $log;
+    $scope.$location = $location;
+    $scope.decodeURIComponent = decodeURIComponent;
     $scope.getObjLength = (obj) => {
         return Object.keys(obj).length || 0;
+    };
+    $scope.highest = {
+        all: {}
+    };
+    $scope.highlightHighest = (type,value,tags) => {
+        for(var i in tags){
+            var tag = tags[i];
+            $scope.highest[tag] = $scope.highest[tag] || {};
+            $scope.highest[tag][type] = $scope.highest[tag][type] || 0;
+            $scope.highest[tag][type] = value > $scope.highest[tag][type] ? value : $scope.highest[tag][type];
+        }
+        $scope.highest['all'][type] = $scope.highest['all'][type] || 0;
+        $scope.highest['all'][type] = value > $scope.highest['all'][type] ? value : $scope.highest['all'][type];
+        //if(!$scope.highest[decodeURIComponent($location.url().split('/')[1])]) return;
+        var path = decodeURIComponent($location.url().split('/')[1]) || 'all';
+        if(!$scope.highest[path]) return;
+        return $scope.highest[path][type] === value ? 'highlightHighest' : '';
+    };
+
+    $scope.stdName = (name) => {
+        if(name === 'Torbjörn') name = 'torbjorn';
+        if(name === 'Lúcio') name = 'lucio';
+        return name.toLowerCase();
     };
 
     $scope.updateAll = () => {
         socket.emit('UpdateAll')
     };
 
-    $scope.currentSort = 'player.level';
+    $scope.currentSort = 'heroStats[0].winPercentage';
     $scope.currentSortDir = '-';
     $scope.changeSortDir = () => {
         $scope.currentSortDir = $scope.currentSortDir === '-'? '' : '-';
     };
-    $scope.filter = 'All';
+    //$scope.filter = 'All';
 
     $scope.getModel = function(model){
         return model[Object.keys(model)[0]]

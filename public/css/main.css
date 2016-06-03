@@ -32,3 +32,29 @@
     color: grey;
     font-size: .65em;
 }
+
+.filter {
+    color: #01ff70;
+}
+
+.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #00b3ee;
+}
+
+.highlightHighest {
+    color: #01ff70;
+}
+
+.title {
+    color: snow;
+}
+
+.portrait {
+    width: 50px;
+}
+
+.character {
+    width: 50px;
+}
