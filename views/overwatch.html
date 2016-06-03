@@ -6,14 +6,15 @@
     <span class="clickable" ng-click="$location.path('/JFT Friends')">JFT Friends</span> |
     <span class="clickable" ng-click="$location.path('/Winky')">Winky</span>
 </span>
-<table class="table table-inverse">
+<table class="table table-inverse newtab">
     <thead>
     <tr ng-click="changeSortDir()">
         <th ng-click="currentSort = 'player.realName'">BattleTag / Name</th>
         <!--<th ng-click="currentSort = 'player.realName'">Name</th>-->
         <th ng-click="currentSort = 'player.level'">Level</th>
-        <th ng-click="currentSort = 'heroStats[0].kda'">KDA</th>
+        <th ng-click="currentSort = 'heroStats[0].kda'">KDR</th>
         <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
+        <th ng-click="currentSort = 'heroStats[0].gamesUp'">Games Above .500</th>
         <!--<th ng-click="currentSort = 'heroStats[0].gamesPlayed'">Games Played</th>-->
         <th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals/Game (G/S/B/A)</th>
         <!--<th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals Per Game</th>-->
@@ -32,7 +33,7 @@
         <th>
             <img class="portrait" ng-src="{{'https://static.watcher.gg/portraits/' + entity.player.portrait + '.png'}}">
             {{entity.player.name}}<br>
-            {{entity.player.realName}}
+            <div class="realName">{{entity.player.realName}}</div>
             <span class="profileLink" >
                 Profiles:
                 <a target="_blank" href="{{'https://watcher.gg/profile/pc/us/'+entity.player.name.split('#')[0]+'%23'+entity.player.name.split('#')[1]}}">watcher</a> |
@@ -43,6 +44,7 @@
         <td ng-class="highlightHighest('level',                 entity.player.level,                        entity.player.tags)">{{entity.player.level}}</td>
         <td ng-class="highlightHighest('kda'  ,                 entity.heroStats[0].kda,                    entity.player.tags)">{{entity.heroStats[0].kda}}</td>
         <td ng-class="highlightHighest('winPercentage',         entity.heroStats[0].winPercentage,          entity.player.tags)">{{entity.heroStats[0].winPercentage | percentage:100}}</td>
+        <td ng-class="highlightHighest('gamesUp', entity.heroStats[0].gamesUp, entity.player.tags)" title="{{entity.heroStats[0].gamesWon}} - {{entity.heroStats[0].gamesPlayed - entity.heroStats[0].gamesWon}}">{{entity.heroStats[0].gamesUp}}</td>
         <!--<td ng-class="highlightHighest('gamesPlayed',           entity.heroStats[0].gamesPlayed,            entity.player.tags)">{{entity.heroStats[0].gamesPlayed}}</td>-->
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
@@ -64,7 +66,7 @@
         <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
         <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
         <td class="profileLink">{{entity.player.lastUpdated}}</td>
-        <td>
+        <td class="charbg">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
             {{entity.mostPlayed}}
         </td>

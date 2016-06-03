@@ -21,7 +21,7 @@
 
 .show-bg {
     background-color: black;
-    background-image: url("../img/edenLogo.png");
+    /*background-image: url("../img/edenLogo.png");*/
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -59,4 +59,24 @@
 
 .character {
     width: 50px;
+}
+
+.charbg {
+    /*display: block;*/
+    /*width: 100%;*/
+    /*background-color: transparent;*/
+    /*width:250px;height:180px;*/
+    /*background: url("https://d1u1mce87gyfbn.cloudfront.net/hero/soldier-76/overlay-portrait.png");*/
+    background-image: url("https://d1u1mce87gyfbn.cloudfront.net/hero/soldier-76/overlay-portrait.png");
+    /*background-repeat: no-repeat;*/
+}
+
+.newtab {
+    /*position: absolute;*/
+}
+
+.realName {
+    font-size: .75em;
+    margin-top: -5px;
+    margin-bottom: -10px;
 }

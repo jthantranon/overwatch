@@ -8,6 +8,7 @@ var Tools = COMMON.getInstance().tools;
 var socket = io();
 
 var app = angular.module("theApp", []).controller("theController", ["$scope","$http", "$log", "$location", function($scope, $http, $log, $location){
+    $location.path('/');
     $scope.moment = moment;
     $scope.tableFilter = 'all';
     $scope.Tools = Tools;
