@@ -68,7 +68,8 @@
         <td class="profileLink">{{entity.player.lastUpdated}}</td>
         <td class="charbg">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
-            {{entity.mostPlayed}}
+            {{entity.mostPlayed}}<br>
+            {{entity.mostPlayedData.gamesWon}}W - {{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}}L
         </td>
     </tr>
     </tbody>

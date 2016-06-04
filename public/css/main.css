@@ -58,7 +58,8 @@
 }
 
 .character {
-    width: 50px;
+    float: left;
+    width: 75px;
 }
 
 .charbg {
