@@ -6,6 +6,19 @@
     <span class="clickable" ng-click="$location.path('/JFT Friends')">JFT Friends</span> |
     <span class="clickable" ng-click="$location.path('/Winky')">Winky</span>
 </span>
+<table class="table table-inverse">
+    <tbody>
+    <tr ng-repeat="(label,heroType) in heroes">
+        <th scope="row">{{label.toUpperCase()}}</th>
+        <td class="heroCell" ng-repeat="(name,bool) in heroType">
+            <div class="heroName">{{name}} ({{obCount(heroOV(name)) || 0}})</div>
+            <span class="heroPlayers" ng-repeat="(name,bool) in heroOV(name)">
+                <span class="label label-default">{{name.split('#')[0]}}</span>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table class="table table-inverse newtab">
     <thead>
     <tr ng-click="changeSortDir()">

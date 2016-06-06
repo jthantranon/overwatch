@@ -14,13 +14,57 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     $scope.Tools = Tools;
     $scope.$log = $log;
     $scope.$location = $location;
+    //$scope.$path = decodeURIComponent($location.url().split('/')[1]) || 'All';
     $scope.decodeURIComponent = decodeURIComponent;
     $scope.getObjLength = (obj) => {
         return Object.keys(obj).length || 0;
     };
+
+    $scope.obCount = (obj) => {
+        if(!obj) return 0;
+        return Object.keys(obj).length;
+    };
+
+    $scope.heroOV = (name) => {
+        if(!$scope.Private) return;
+        return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['mains'][name];
+    };
+
     $scope.highest = {
         all: {}
     };
+
+    $scope.heroes = {
+        offense: {
+            'Genji': true,
+            'McCree': true,
+            'Pharah': true,
+            'Reaper': true,
+            'Soldier: 76': true,
+            'Tracer': true
+        },
+        defense: {
+            'Bastion': true,
+            'Hanzo': true,
+            'Junkrat': true,
+            'Mei': true,
+            'Torbjörn': true,
+            'Widowmaker': true
+        },
+        tank: {
+            'D.Va': true,
+            'Reinhardt': true,
+            'Roadhog': true,
+            'Winston': true,
+            'Zarya': true
+        },
+        support: {
+            'Lúcio': true,
+            'Mercy': true,
+            'Symmetra': true,
+            'Zenyatta': true
+        }
+    }
     $scope.highlightHighest = (type,value,tags) => {
         for(var i in tags){
             var tag = tags[i];
