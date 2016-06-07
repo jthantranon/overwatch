@@ -11,8 +11,15 @@
     <tr ng-repeat="(label,heroType) in heroes">
         <th scope="row">{{label.toUpperCase()}}</th>
         <td class="heroCell" ng-repeat="(name,bool) in heroType">
-            <div class="heroName">{{name}} ({{obCount(heroOV(name)) || 0}})</div>
+            <div class="heroName">
+                {{name}}
+                <span class="label label-primary" ng-show="obCount(heroOV(name))">{{obCount(heroOV(name)) || 0}}</span>
+                <span class="label label-default" ng-show="obCount(hero2OV(name))">{{obCount(hero2OV(name)) || 0}}</span>
+            </div>
             <span class="heroPlayers" ng-repeat="(name,bool) in heroOV(name)">
+                <span class="label label-primary">{{name.split('#')[0]}}</span>
+            </span>
+            <span class="heroPlayers" ng-repeat="(name,bool) in hero2OV(name)">
                 <span class="label label-default">{{name.split('#')[0]}}</span>
             </span>
         </td>
@@ -35,9 +42,11 @@
         <th ng-click="currentSort = 'careerStats[0].mostGameDamageDone'">Most Dmg/Game</th>
         <th ng-click="currentSort = 'careerStats[0].mostGameHealingDone'">Most Heals/Game</th>
         <th ng-click="currentSort = 'achievements.length'">Cheevies</th>
-        <th ng-click="currentSort = 'player.lastUpdated'">Last Updated</th>
+        <!--<th ng-click="currentSort = 'player.lastUpdated'">Last Updated</th>-->
         <!--<th ng-click="currentSort = 'player.tags'">Tags</th>-->
-        <th ng-click="currentSort = 'mostPlayed'">Favorite Hero</th>
+        <th ng-click="currentSort = 'mostPlayed'">Most Played</th>
+        <th ng-click="currentSort = 'secondMostPlayed'">2nd Most Played</th>
+        <th ng-click="currentSort = 'bestWinPP'">Best Win %</th>
     </tr>
     </thead>
     <tbody>
@@ -78,13 +87,24 @@
         <td ng-class="highlightHighest('mostGameDamageDone',  entity.careerStats[0].mostGameDamageDone, entity.player.tags)">{{entity.careerStats[0].mostGameDamageDone}}</td>
         <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
         <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
-        <td class="profileLink">{{entity.player.lastUpdated}}</td>
+        <!--<td class="profileLink">{{entity.player.lastUpdated}}</td>-->
         <td class="charbg">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
             {{entity.mostPlayed}}<br>
-            {{entity.mostPlayedData.gamesWon}}W - {{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}}L
+            {{entity.mostPlayedData.gamesWon}}/{{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}} ({{entity.mostPlayedData.gamesWon/entity.mostPlayedData.gamesPlayed | percentage:100}})
+        </td>
+        <td class="charbg">
+            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.secondMostPlayed) +'/overlay-portrait.png'}}">
+            {{entity.secondMostPlayed}}<br>
+            {{entity.secondMostPlayedData.gamesWon}}/{{entity.secondMostPlayedData.gamesPlayed - entity.secondMostPlayedData.gamesWon}} ({{entity.secondMostPlayedData.gamesWon/entity.secondMostPlayedData.gamesPlayed | percentage:100}})
+        </td>
+        <td class="charbg">
+            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.bestWinP) +'/overlay-portrait.png'}}">
+            {{entity.bestWinP}}<br>
+            {{entity.bestWinPData.gamesWon}}/{{entity.bestWinPData.gamesPlayed - entity.bestWinPData.gamesWon}} ({{entity.bestWinPP | percentage:100}})
         </td>
     </tr>
     </tbody>
 </table>
 <button class="btn btn-primary btn-sm" ng-click="updateAll()">Update All Data</button>
+{{Private.overwatchA[0].player.lastUpdated}}

@@ -30,6 +30,11 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['mains'][name];
     };
 
+    $scope.hero2OV = (name) => {
+        if(!$scope.Private) return;
+        return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['alts'][name];
+    };
+
     $scope.highest = {
         all: {}
     };
