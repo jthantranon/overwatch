@@ -90,3 +90,7 @@
 .heroCell {
     min-width: 300px;
 }
+
+.headings th {
+    font-size: 0.75em;
+}

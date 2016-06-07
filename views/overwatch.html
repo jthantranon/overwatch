@@ -28,13 +28,13 @@
 </table>
 <table class="table table-inverse newtab">
     <thead>
-    <tr ng-click="changeSortDir()">
+    <tr ng-click="changeSortDir()" class="headings">
         <th ng-click="currentSort = 'player.realName'">BattleTag / Name</th>
         <!--<th ng-click="currentSort = 'player.realName'">Name</th>-->
         <th ng-click="currentSort = 'player.level'">Level</th>
         <th ng-click="currentSort = 'heroStats[0].kda'">KDR</th>
         <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
-        <th ng-click="currentSort = 'heroStats[0].gamesUp'">Games Above .500</th>
+        <th ng-click="currentSort = 'heroStats[0].gamesUp'">+/- .500</th>
         <!--<th ng-click="currentSort = 'heroStats[0].gamesPlayed'">Games Played</th>-->
         <th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals/Game (G/S/B/A)</th>
         <!--<th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals Per Game</th>-->
