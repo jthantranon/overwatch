@@ -1,7 +1,7 @@
 <h2 class="title">-------- {{decodeURIComponent($location.url().split('/')[1]) || 'All'}} --------</h2>
 <span class="filter">
     Filter:
-    <span class="clickable" ng-click="$location.path('')">All</span> |
+    <!--<span class="clickable" ng-click="$location.path('')">All</span> |-->
     <span ng-repeat="(tag,data) in Private.tagsData">
         <span class="clickable" ng-click="$location.path('/'+tag)">{{tag}}</span> |
     </span>
@@ -63,12 +63,13 @@
         ng-repeat="entity in Private.overwatchA | orderBy: currentSortDir+currentSort">
         <th>
             <img class="portrait" ng-src="{{'https://static.watcher.gg/portraits/' + entity.player.portrait + '.png'}}">
-            {{entity.player.name}}<br>
-            <div class="realName">{{entity.player.realName}}</div>
+            {{entity.player.realName}}<br>
+            <div class="realName">{{entity.player.name}}</div>
             <span class="profileLink" >
-                Profiles:
+                <!--Profiles:-->
                 <a target="_blank" href="{{'https://watcher.gg/profile/pc/us/'+entity.player.name.split('#')[0]+'%23'+entity.player.name.split('#')[1]}}">watcher</a> |
-                <a target="_blank" href="{{'https://playoverwatch.com/en-us/career/pc/us/'+entity.player.name.split('#')[0]+'-'+entity.player.name.split('#')[1]}}">bnet</a>
+                <a target="_blank" href="{{'https://playoverwatch.com/en-us/career/pc/us/'+entity.player.name.split('#')[0]+'-'+entity.player.name.split('#')[1]}}">bnet</a> |
+                <a target="_blank" ng-click="addGroup(entity.player.name)">-group-</a>
             </span>
         </th>
         <!--<td>{{entity.player.realName}}</td>-->

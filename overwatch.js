@@ -5,13 +5,25 @@ var State = require('./lib/state').getInstance();
 
 var Loader = require('./lib/loader').getInstance(launchReadout);
 
-var firebase = require('firebase');
-
-var config = {
-    serviceAccount: State.private.fbinit,
-    databaseURL: "https://edenoverwatch.firebaseio.com",
-};
-firebase.initializeApp(config);
+// var firebase = require('firebase');
+//
+// var config = {
+//     serviceAccount: State.private.fbinit,
+//     databaseURL: "https://edenoverwatch.firebaseio.com",
+// };
+// firebase.initializeApp(config);
+//
+// var db = firebase.database();
+// var ref = db.ref("/data");
+//
+// ref.on("value",(data)=>{
+//     State.private.fb = data.val();
+//     console.log(data.val());
+//     console.log(State.private.fb);
+// });
+//
+// var wee = State.tools.convertBT('JFT%231112','-');
+// console.log('!@#@!#!@#@!',wee);
 
 function launchReadout(){
     console.log(dedent`.

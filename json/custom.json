@@ -1,14 +1,26 @@
 {
-    "yegg#1402": {
-        "btag": "yegg#1402",
+    "EpicWinFTW-1610": {
+        "btag": "EpicWinFTW#1610",
         "tags": [
-            "Riot"
+            "All"
         ]
     },
-    "MixDJ#1261": {
+    "MixDJ-1261": {
         "btag": "MixDJ#1261",
         "tags": [
-            "Riot"
+            "All"
+        ]
+    },
+    "TiredDaemon-1439": {
+        "btag": "TiredDaemon#1439",
+        "tags": [
+            "All"
+        ]
+    },
+    "yegg-1402": {
+        "btag": "yegg#1402",
+        "tags": [
+            "All"
         ]
     }
 }

@@ -22,6 +22,15 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         })
     };
 
+    $scope.addGroup = (name) => {
+        console.log(name);
+        var group =  window.prompt('group name, everything sensitive');
+        socket.emit('AddGroup',{
+            btag: name,
+            group: group
+        });
+    };
+
     //$scope.$path = decodeURIComponent($location.url().split('/')[1]) || 'All';
     $scope.decodeURIComponent = decodeURIComponent;
     $scope.getObjLength = (obj) => {
@@ -39,7 +48,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     };
 
     $scope.hero2OV = (name) => {
-        if(!$scope.Private || !$scope.Private.tagsData) return;
+        if(!$scope.Private || !$scope.Private.tagsData || !$scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']) return;
         return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['alts'][name];
     };
 

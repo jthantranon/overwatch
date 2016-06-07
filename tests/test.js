@@ -6,3 +6,5 @@ function test() {
 }
 
 test('hey','yo','wee');
+
+console.log(process.env.TEST);
