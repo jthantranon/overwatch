@@ -5,6 +5,14 @@ var State = require('./lib/state').getInstance();
 
 var Loader = require('./lib/loader').getInstance(launchReadout);
 
+var firebase = require('firebase');
+
+var config = {
+    serviceAccount: State.private.fbinit,
+    databaseURL: "https://edenoverwatch.firebaseio.com",
+};
+firebase.initializeApp(config);
+
 function launchReadout(){
     console.log(dedent`.
         . ${Data.breaker.equal}

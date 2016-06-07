@@ -11,6 +11,7 @@
     "jquery": "*",
     "font-awesome": "*",
     "moment": "*",
-    "chance": "*"
+    "chance": "*",
+    "firebase": "*"
   }
 }
