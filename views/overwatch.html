@@ -2,9 +2,13 @@
 <span class="filter">
     Filter:
     <span class="clickable" ng-click="$location.path('')">All</span> |
-    <span class="clickable" ng-click="$location.path('/Gamblit')">Gamblit</span> |
-    <span class="clickable" ng-click="$location.path('/JFT Friends')">JFT Friends</span> |
-    <span class="clickable" ng-click="$location.path('/Winky')">Winky</span>
+    <span ng-repeat="(tag,data) in Private.tagsData">
+        <span class="clickable" ng-click="$location.path('/'+tag)">{{tag}}</span> |
+    </span>
+    <!--<span class="clickable" ng-click="$location.path('')">All</span> |-->
+    <!--<span class="clickable" ng-click="$location.path('/Gamblit')">Gamblit</span> |-->
+    <!--<span class="clickable" ng-click="$location.path('/JFT Friends')">JFT Friends</span> |-->
+    <!--<span class="clickable" ng-click="$location.path('/Winky')">Winky</span>-->
 </span>
 <table class="table table-inverse">
     <tbody>
@@ -15,6 +19,7 @@
                 {{name}}
                 <span class="label label-primary" ng-show="obCount(heroOV(name))">{{obCount(heroOV(name)) || 0}}</span>
                 <span class="label label-default" ng-show="obCount(hero2OV(name))">{{obCount(hero2OV(name)) || 0}}</span>
+                <span class="label label-danger" ng-show="obCount(heroBest(name))">{{obCount(heroBest(name)) || 0}}</span>
             </div>
             <span class="heroPlayers" ng-repeat="(name,bool) in heroOV(name)">
                 <span class="label label-primary">{{name.split('#')[0]}}</span>
@@ -22,10 +27,14 @@
             <span class="heroPlayers" ng-repeat="(name,bool) in hero2OV(name)">
                 <span class="label label-default">{{name.split('#')[0]}}</span>
             </span>
+            <span class="heroPlayers" ng-repeat="(name,bool) in heroBest(name)">
+                <span class="label label-danger">{{name.split('#')[0]}}</span>
+            </span>
         </td>
     </tr>
     </tbody>
 </table>
+<span ng-click="addTag()">+Add</span>
 <table class="table table-inverse newtab">
     <thead>
     <tr ng-click="changeSortDir()" class="headings">
@@ -44,8 +53,8 @@
         <th ng-click="currentSort = 'achievements.length'">Cheevies</th>
         <!--<th ng-click="currentSort = 'player.lastUpdated'">Last Updated</th>-->
         <!--<th ng-click="currentSort = 'player.tags'">Tags</th>-->
-        <th ng-click="currentSort = 'mostPlayed'">Most Played</th>
-        <th ng-click="currentSort = 'secondMostPlayed'">2nd Most Played</th>
+        <th ng-click="currentSort = 'mostPlayedWP'">Most Played</th>
+        <th ng-click="currentSort = 'secondMostPlayedWP'">2nd Most Played</th>
         <th ng-click="currentSort = 'bestWinPP'">Best Win %</th>
     </tr>
     </thead>
@@ -88,17 +97,17 @@
         <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
         <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
         <!--<td class="profileLink">{{entity.player.lastUpdated}}</td>-->
-        <td class="charbg">
+        <td class="charbg" ng-class="highlightHighest('mostPlayedWP', entity.mostPlayedWP, entity.player.tags)">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
             {{entity.mostPlayed}}<br>
-            {{entity.mostPlayedData.gamesWon}}/{{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}} ({{entity.mostPlayedData.gamesWon/entity.mostPlayedData.gamesPlayed | percentage:100}})
+            {{entity.mostPlayedData.gamesWon}}/{{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}} ({{entity.mostPlayedWP | percentage:100}})
         </td>
-        <td class="charbg">
+        <td class="charbg" ng-class="highlightHighest('secondMostPlayedWP', entity.secondMostPlayedWP, entity.player.tags)">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.secondMostPlayed) +'/overlay-portrait.png'}}">
             {{entity.secondMostPlayed}}<br>
-            {{entity.secondMostPlayedData.gamesWon}}/{{entity.secondMostPlayedData.gamesPlayed - entity.secondMostPlayedData.gamesWon}} ({{entity.secondMostPlayedData.gamesWon/entity.secondMostPlayedData.gamesPlayed | percentage:100}})
+            {{entity.secondMostPlayedData.gamesWon}}/{{entity.secondMostPlayedData.gamesPlayed - entity.secondMostPlayedData.gamesWon}} ({{entity.secondMostPlayedWP | percentage:100}})
         </td>
-        <td class="charbg">
+        <td class="charbg" ng-class="highlightHighest('bestWinPP', entity.bestWinPP, entity.player.tags)">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.bestWinP) +'/overlay-portrait.png'}}">
             {{entity.bestWinP}}<br>
             {{entity.bestWinPData.gamesWon}}/{{entity.bestWinPData.gamesPlayed - entity.bestWinPData.gamesWon}} ({{entity.bestWinPP | percentage:100}})

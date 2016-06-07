@@ -14,6 +14,14 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     $scope.Tools = Tools;
     $scope.$log = $log;
     $scope.$location = $location;
+
+    $scope.addTag = () => {
+        var tag =  window.prompt('btag#1234');
+        socket.emit('AddTag',{
+            btag: tag
+        })
+    };
+
     //$scope.$path = decodeURIComponent($location.url().split('/')[1]) || 'All';
     $scope.decodeURIComponent = decodeURIComponent;
     $scope.getObjLength = (obj) => {
@@ -26,13 +34,18 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     };
 
     $scope.heroOV = (name) => {
-        if(!$scope.Private) return;
+        if(!$scope.Private || !$scope.Private.tagsData) return;
         return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['mains'][name];
     };
 
     $scope.hero2OV = (name) => {
-        if(!$scope.Private) return;
+        if(!$scope.Private || !$scope.Private.tagsData) return;
         return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['alts'][name];
+    };
+
+    $scope.heroBest = (name) => {
+        if(!$scope.Private || !$scope.Private.tagsData) return;
+        return $scope.Private.tagsData[decodeURIComponent($location.url().split('/')[1]) || 'All']['best'][name];
     };
 
     $scope.highest = {
@@ -69,7 +82,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
             'Symmetra': true,
             'Zenyatta': true
         }
-    }
+    };
     $scope.highlightHighest = (type,value,tags) => {
         for(var i in tags){
             var tag = tags[i];
@@ -91,7 +104,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         if(name === 'Soldier: 76') name = 'soldier-76';
         if(name === 'D.Va') name = 'dva';
 
-        return name.toLowerCase();
+        return name && name.toLowerCase();
     };
 
     $scope.updateAll = () => {
