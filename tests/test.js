@@ -8,3 +8,12 @@ function test() {
 test('hey','yo','wee');
 
 console.log(process.env.TEST);
+
+function stuff(thing){
+    thing.wee = 'woo';
+}
+
+var that = {};
+that.who = 'me';
+stuff(that);
+console.log(that);
