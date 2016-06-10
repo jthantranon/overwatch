@@ -8,7 +8,7 @@ var Tools = COMMON.getInstance().tools;
 var socket = io();
 
 var app = angular.module("theApp", []).controller("theController", ["$scope","$http", "$log", "$location", function($scope, $http, $log, $location){
-    $location.path('/');
+    $location.path('/All');
     $scope.moment = moment;
     $scope.tableFilter = 'all';
     $scope.Tools = Tools;
@@ -98,13 +98,18 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
             $scope.highest[tag] = $scope.highest[tag] || {};
             $scope.highest[tag][type] = $scope.highest[tag][type] || 0;
             $scope.highest[tag][type] = value > $scope.highest[tag][type] ? value : $scope.highest[tag][type];
+            // if($scope.private){
+            //     $scope.private.highest = $scope.private.highest || {};
+            //     $scope.private.highest = $scope.highest;
+            // }
+
         }
         $scope.highest['all'][type] = $scope.highest['all'][type] || 0;
         $scope.highest['all'][type] = value > $scope.highest['all'][type] ? value : $scope.highest['all'][type];
         //if(!$scope.highest[decodeURIComponent($location.url().split('/')[1])]) return;
         var path = decodeURIComponent($location.url().split('/')[1]) || 'all';
         if(!$scope.highest[path]) return;
-        return $scope.highest[path][type] === value ? 'highlightHighest' : '';
+        return $scope.highest[path][type] == value ? 'highlightHighest' : '';
     };
 
     $scope.stdName = (name) => {
@@ -124,6 +129,9 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     $scope.currentSortDir = '-';
     $scope.changeSortDir = () => {
         $scope.currentSortDir = $scope.currentSortDir === '-'? '' : '-';
+    };
+    $scope.changeSortDirHero = () => {
+        $scope.currentSortDirHero = $scope.currentSortDirHero === '-'? '' : '-';
     };
     //$scope.filter = 'All';
 
@@ -158,6 +166,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
 
         State = msg;
         console.dir(msg);
+        $scope.Private.highest = $scope.highest;
         $scope.$apply();
     });
 }]);

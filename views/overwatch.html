@@ -74,14 +74,24 @@
                 <a target="_blank" ng-click="addGroup(entity.player.name)">-group-</a>
             </span>
         </th>
-        <!--<td>{{entity.player.realName}}</td>-->
-        <td ng-class="highlightHighest('level',                 entity.player.level,                        entity.player.tags)">{{entity.player.level}}</td>
-        <td ng-class="highlightHighest('edr', entity.heroStats[0].edr, entity.player.tags)">{{entity.heroStats[0].edr}}</td>
-        <td>{{entity.heroStats[0].finalBlows}}/{{entity.heroStats[0].deaths}} ({{entity.heroStats[0].finalBlows/entity.heroStats[0].deaths}})</td>
-        <td ng-class="highlightHighest('winPercentage',         entity.heroStats[0].winPercentage,          entity.player.tags)">{{entity.heroStats[0].winPercentage | percentage:100}}</td>
-        <td ng-class="highlightHighest('gamesUp', entity.heroStats[0].gamesUp, entity.player.tags)" title="{{entity.heroStats[0].gamesWon}} - {{entity.heroStats[0].gamesPlayed - entity.heroStats[0].gamesWon}}">{{entity.heroStats[0].gamesUp}}</td>
-        <td ng-class="highlightHighest('killsUp', entity.heroStats[0].killsUp, entity.player.tags)" title="{{entity.heroStats[0].finalBlows}} / {{entity.heroStats[0].deaths}} / {{entity.heroStats[0].assists}}">{{entity.heroStats[0].killsUp}}</td>
-        <!--<td ng-class="highlightHighest('gamesPlayed',           entity.heroStats[0].gamesPlayed,            entity.player.tags)">{{entity.heroStats[0].gamesPlayed}}</td>-->
+        <td ng-class="highlightHighest('level', entity.player.level, entity.player.tags)">
+            {{entity.player.level}}
+        </td>
+        <td title={{entity.heroStats[0].edr}} ng-class="highlightHighest('edr', entity.heroStats[0].edr, entity.player.tags)">
+            {{entity.heroStats[0].edr | number:2}}
+        </td>
+        <td ng-class="highlightHighest('kdr', entity.heroStats[0].kdr, entity.player.tags)">
+            {{entity.heroStats[0].kdr | number:2}}
+        </td>
+        <td ng-class="highlightHighest('winPercentage', entity.heroStats[0].winPercentage, entity.player.tags)">
+            {{entity.heroStats[0].winPercentage | percentage:100}}
+        </td>
+        <td ng-class="highlightHighest('gamesUp', entity.heroStats[0].gamesUp, entity.player.tags)" title="{{entity.heroStats[0].gamesWon}} - {{entity.heroStats[0].gamesPlayed - entity.heroStats[0].gamesWon}}">
+            {{entity.heroStats[0].gamesUp}}
+        </td>
+        <td ng-class="highlightHighest('killsUp', entity.heroStats[0].killsUp, entity.player.tags)" title="{{entity.heroStats[0].finalBlows}} / {{entity.heroStats[0].deaths}} / {{entity.heroStats[0].assists}}">
+            {{entity.heroStats[0].killsUp}}
+        </td>
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
                 {{entity.heroStats[0].avgGold | number:1}}
@@ -96,7 +106,6 @@
                 {{entity.heroStats[0].avgMedal | number:1}}
             </span>
         </td>
-        <!--<td ng-class="highlightHighest('avgMedal',              entity.heroStats[0].avgMedal,               entity.player.tags)">{{entity.heroStats[0].avgMedal | number:2}}</td>-->
         <td ng-class="highlightHighest('mostGameEliminations',  entity.careerStats[0].mostGameEliminations, entity.player.tags)">{{entity.careerStats[0].mostGameEliminations}}</td>
         <td ng-class="highlightHighest('mostGameDamageDone',  entity.careerStats[0].mostGameDamageDone, entity.player.tags)">{{entity.careerStats[0].mostGameDamageDone}}</td>
         <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
@@ -125,7 +134,7 @@
 
 <table class="table table-inverse newtab">
     <thead>
-    <tr ng-click="changeSortDir()" class="headings">
+    <tr ng-click="changeSortDirHero()" class="headings">
         <th ng-click="currentSortHero = 'name'">Hero</th>
         <th ng-click="currentSortHero = 'edr'">EDR</th>
         <th ng-click="currentSortHero = 'kdr'">KDR</th>
@@ -136,27 +145,27 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="hero in Private.overwatchHeroesA | orderBy: currentSortDir+currentSortHero">
+    <tr ng-repeat="hero in Private.overwatchHeroesA | orderBy: currentSortDirHero+currentSortHero">
         <th>
             <div class="realName">{{hero.name}}</div>
         </th>
-        <td ng-class="highlightHighest('edr', hero.edr, player.tags)">{{hero.edr}}</td>
-        <td>{{hero.kdr}}</td>
-        <td ng-class="highlightHighest('winPercentage', hero.winPercentage, player.tags)">{{hero.winPercentage | percentage:100}}</td>
-        <td ng-class="highlightHighest('gamesUp', hero.gamesUp, player.tags)" title="{{hero.gamesWon}} - {{hero.gamesPlayed - hero.gamesWon}}">{{hero.gamesUp}}</td>
-        <td ng-class="highlightHighest('killsUp', hero.killsUp, player.tags)" title="{{hero.finalBlows}} / {{hero.deaths}} / {{hero.assists}}">{{hero.killsUp}}</td>
+        <td ng-class="highlightHighest('edr', hero.edr, ['All'])">{{hero.edr}}</td>
+        <td ng-class="highlightHighest('kdr', hero.kdr, ['All'])">{{hero.kdr}}</td>
+        <td ng-class="highlightHighest('winPercentage', hero.winPercentage, ['All'])">{{hero.winPercentage | percentage:100}}</td>
+        <td ng-class="highlightHighest('gamesUp', hero.gamesUp, ['All'])" title="{{hero.gamesWon}} - {{hero.gamesPlayed - hero.gamesWon}}">{{hero.gamesUp}}</td>
+        <td ng-class="highlightHighest('killsUp', hero.killsUp, ['All'])" title="{{hero.finalBlows}} / {{hero.deaths}} / {{hero.assists}}">{{hero.killsUp}}</td>
         <!--<td ng-class="highlightHighest('gamesPlayed',           hero.gamesPlayed,            player.tags)">{{hero.gamesPlayed}}</td>-->
         <td>
-            <span ng-class="highlightHighest('avgGold', hero.avgGold, player.tags)">
+            <span ng-class="highlightHighest('avgGold', hero.avgGold, ['All'])">
                 {{hero.avgGold | number:1}}
             </span> |
-            <span ng-class="highlightHighest('avgSilver', hero.avgSilver, player.tags)">
+            <span ng-class="highlightHighest('avgSilver', hero.avgSilver, ['All'])">
                 {{hero.avgSilver | number:1}}
             </span> |
-            <span ng-class="highlightHighest('avgBronze', hero.avgBronze, player.tags)">
+            <span ng-class="highlightHighest('avgBronze', hero.avgBronze, ['All'])">
                 {{hero.avgBronze | number:1}}
             </span> |
-            <span ng-class="highlightHighest('avgMedal', hero.avgMedal, player.tags)">
+            <span ng-class="highlightHighest('avgMedal', hero.avgMedal, ['All'])">
                 {{hero.avgMedal | number:1}}
             </span>
         </td>
