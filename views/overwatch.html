@@ -149,8 +149,8 @@
         <th>
             <div class="realName">{{hero.name}}</div>
         </th>
-        <td ng-class="highlightHighest('edr', hero.edr, ['All'])">{{hero.edr}}</td>
-        <td ng-class="highlightHighest('kdr', hero.kdr, ['All'])">{{hero.kdr}}</td>
+        <td ng-class="highlightHighest('edr', hero.edr, ['All'])">{{hero.edr | number:2}}</td>
+        <td ng-class="highlightHighest('kdr', hero.kdr, ['All'])">{{hero.kdr | number:2}}</td>
         <td ng-class="highlightHighest('winPercentage', hero.winPercentage, ['All'])">{{hero.winPercentage | percentage:100}}</td>
         <td ng-class="highlightHighest('gamesUp', hero.gamesUp, ['All'])" title="{{hero.gamesWon}} - {{hero.gamesPlayed - hero.gamesWon}}">{{hero.gamesUp}}</td>
         <td ng-class="highlightHighest('killsUp', hero.killsUp, ['All'])" title="{{hero.finalBlows}} / {{hero.deaths}} / {{hero.assists}}">{{hero.killsUp}}</td>
