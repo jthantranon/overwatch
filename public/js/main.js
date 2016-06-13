@@ -126,12 +126,17 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     };
 
     $scope.currentSort = 'heroStats[0].winPercentage';
+    $scope.currentSortPH = 'winPercentage';
     $scope.currentSortDir = '-';
+    $scope.currentSortDirPH = '-';
     $scope.changeSortDir = () => {
         $scope.currentSortDir = $scope.currentSortDir === '-'? '' : '-';
     };
     $scope.changeSortDirHero = () => {
         $scope.currentSortDirHero = $scope.currentSortDirHero === '-'? '' : '-';
+    };
+    $scope.changeSortDirPH = () => {
+        $scope.currentSortDirPH = $scope.currentSortDirPH === '-'? '' : '-';
     };
     //$scope.filter = 'All';
 
@@ -180,30 +185,48 @@ app.filter('percentage', function() {
     };
 });
 
-app.filter('orderObjectBy', function() {
-    return function(items, fields, reverse) {
-        var filtered;
-        filtered = [];
-        angular.forEach(items, function(item) {
-            return filtered.push(item);
-        });
-        filtered.sort(function(a, b) {
-            var sifted_item_a, sifted_item_b;
-            sifted_item_a = a;
-            sifted_item_b = b;
-            angular.forEach(fields, function(field) {
-                sifted_item_a = sifted_item_a[field];
-                return sifted_item_b = sifted_item_b[field];
-            });
-            if (sifted_item_a > sifted_item_b) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
-        if (reverse) {
-            filtered.reverse();
+app.filter('orderObjectBy', function(){
+    return function(input, attribute) {
+        if (!angular.isObject(input)) return input;
+
+        var array = [];
+        for(var objectKey in input) {
+            array.push(input[objectKey]);
         }
-        return filtered;
-    };
+
+        array.sort(function(a, b){
+            a = parseInt(a[attribute]);
+            b = parseInt(b[attribute]);
+            return a - b;
+        });
+        return array;
+    }
 });
+
+// app.filter('orderObjectBy', function() {
+//     return function(items, fields, reverse) {
+//         var filtered;
+//         filtered = [];
+//         angular.forEach(items, function(item) {
+//             return filtered.push(item);
+//         });
+//         filtered.sort(function(a, b) {
+//             var sifted_item_a, sifted_item_b;
+//             sifted_item_a = a;
+//             sifted_item_b = b;
+//             angular.forEach(fields, function(field) {
+//                 sifted_item_a = sifted_item_a[field];
+//                 return sifted_item_b = sifted_item_b[field];
+//             });
+//             if (sifted_item_a > sifted_item_b) {
+//                 return 1;
+//             } else {
+//                 return -1;
+//             }
+//         });
+//         if (reverse) {
+//             filtered.reverse();
+//         }
+//         return filtered;
+//     };
+// });

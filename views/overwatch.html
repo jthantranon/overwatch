@@ -41,18 +41,18 @@
         <th ng-click="currentSort = 'player.realName'">BattleTag / Name</th>
         <!--<th ng-click="currentSort = 'player.realName'">Name</th>-->
         <th ng-click="currentSort = 'player.level'">Level</th>
-        <th ng-click="currentSort = 'heroStats[0].edr'">EDR</th>
-        <th ng-click="currentSort = 'heroStats[0].kdr'">KDR</th>
-        <th ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
-        <th ng-click="currentSort = 'heroStats[0].gamesUp'">+/- .500</th>
-        <th ng-click="currentSort = 'heroStats[0].killsUp'">+/- TKD</th>
+        <th title="Elimination/Death Ratio" ng-click="currentSort = 'heroStats[0].edr'">EDR</th>
+        <th title="Kill/Death Ratio (not counting assists)" ng-click="currentSort = 'heroStats[0].kdr'">KDR</th>
+        <th title="Win Percentage" ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
+        <th title="Wins above .500" ng-click="currentSort = 'heroStats[0].gamesUp'">+/- Wins</th>
+        <th title="Kills above .500" ng-click="currentSort = 'heroStats[0].killsUp'">+/- Kills</th>
         <!--<th ng-click="currentSort = 'heroStats[0].gamesPlayed'">Games Played</th>-->
-        <th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals/Game (G/S/B/A)</th>
+        <th title="Average Medals Per Game Gold/Silver/Bronze/Toal" ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals/Game (G/S/B/T)</th>
         <!--<th ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals Per Game</th>-->
-        <th ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Elims/Game</th>
-        <th ng-click="currentSort = 'careerStats[0].mostGameDamageDone'">Most Dmg/Game</th>
-        <th ng-click="currentSort = 'careerStats[0].mostGameHealingDone'">Most Heals/Game</th>
-        <th ng-click="currentSort = 'achievements.length'">Cheevies</th>
+        <th title="Most elims in a single game" ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Elims/Game</th>
+        <th title="Most damage in a single game" ng-click="currentSort = 'careerStats[0].mostGameDamageDone'">Most Dmg/Game</th>
+        <th title="Most healing in a single game" ng-click="currentSort = 'careerStats[0].mostGameHealingDone'">Most Heals/Game</th>
+        <th title="Achievements"  ng-click="currentSort = 'achievements.length'">Cheevies</th>
         <!--<th ng-click="currentSort = 'player.lastUpdated'">Last Updated</th>-->
         <!--<th ng-click="currentSort = 'player.tags'">Tags</th>-->
         <th ng-click="currentSort = 'mostPlayedWP'">Most Played</th>
@@ -139,9 +139,10 @@
         <th ng-click="currentSortHero = 'edr'">EDR</th>
         <th ng-click="currentSortHero = 'kdr'">KDR</th>
         <th ng-click="currentSortHero = 'winPercentage'">Win %</th>
-        <th ng-click="currentSortHero = 'gamesUp'">+/- .500</th>
-        <th ng-click="currentSortHero = 'killsUp'">+/- TKD</th>
+        <th title="Wins above .500" ng-click="currentSortHero = 'gamesUp'">+/- Wins</th>
+        <th title="Kills above .500" ng-click="currentSortHero = 'killsUp'">+/- Kills</th>
         <th ng-click="currentSortHero = 'avgMedal'">Avg Medals/Game (G/S/B/A)</th>
+        <th>Players</th>
     </tr>
     </thead>
     <tbody>
@@ -168,6 +169,31 @@
             <span ng-class="highlightHighest('avgMedal', hero.avgMedal, ['All'])">
                 {{hero.avgMedal | number:1}}
             </span>
+        </td>
+        <td>
+            <table ng-hide="hero.name === 'All'" class="table table-sm playHeroTable">
+                <thead>
+                <tr ng-click="changeSortDirPH()">
+                    <th ng-click="currentSortPH = 'player'">Name</th>
+                    <td ng-click="currentSortPH = 'winPercentage'">Win %</td>
+                    <td ng-click="currentSortPH = 'edr'">EDR</td>
+                    <td ng-click="currentSortPH = 'kdr'">KDR</td>
+                    <!--<td ng-click="currentSortPH = 'soloKills'">SoloKills</td>-->
+                    <td ng-click="currentSortPH = 'avgMedal'">Avg Medal</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="ph in hero.playersA | orderBy: currentSortDirPH+currentSortPH"
+                    ng-hide="Private.overwatch[ph.player].player.tags.indexOf(decodeURIComponent($location.url().split('/')[1])) < 0 || ph.gamesPlayed < 10">
+                    <th scope="row" title="{{ph}}">{{ph.player}}</th>
+                    <td title="{{ph.gamesWon}}W / {{ph.gamesPlayed-ph.gamesWon}}L">{{ph.winPercentage | percentage}}</td>
+                    <td>{{ph.edr | number:2}}</td>
+                    <td>{{ph.kdr | number:2}}</td>
+                    <!--<td>{{ph.soloKills | number:2}}</td>-->
+                    <td>{{ph.avgMedal | number:2}}</td>
+                </tr>
+                </tbody>
+            </table>
         </td>
     </tr>
     </tbody>

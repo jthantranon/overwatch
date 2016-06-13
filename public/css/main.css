@@ -94,3 +94,15 @@
 .headings th {
     font-size: 0.55em;
 }
+
+.playHeroTable {
+    color: black;
+}
+
+.playHeroTable th {
+     width: 175px
+ }
+
+.playHeroTable td {
+    width: 75px
+}
