@@ -40,6 +40,7 @@
     <tr ng-click="changeSortDir()" class="headings">
         <th ng-click="currentSort = 'player.realName'">BattleTag / Name</th>
         <!--<th ng-click="currentSort = 'player.realName'">Name</th>-->
+        <th ng-click="currentSort = 'competitiveRank.competitive_rank'">Rank</th>
         <th ng-click="currentSort = 'player.level'">Level</th>
         <th title="Elimination/Death Ratio" ng-click="currentSort = 'heroStats[0].edr'">EDR</th>
         <th title="Kill/Death Ratio (not counting assists)" ng-click="currentSort = 'heroStats[0].kdr'">KDR</th>
@@ -74,6 +75,9 @@
                 <a target="_blank" ng-click="addGroup(entity.player.name)">-group-</a>
             </span>
         </th>
+        <td ng-class="highlightHighest('rank', entity.competitiveRank.competitive_rank, entity.player.tags)">
+            {{entity.competitiveRank.competitive_rank}}
+        </td>
         <td ng-class="highlightHighest('level', entity.player.level, entity.player.tags)">
             {{entity.player.level}}
         </td>
@@ -94,6 +98,7 @@
         </td>
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
+                <span class="label label-primary">Primary</span>
                 {{entity.heroStats[0].avgGold | number:1}}
             </span> |
             <span ng-class="highlightHighest('avgSilver', entity.heroStats[0].avgSilver, entity.player.tags)">

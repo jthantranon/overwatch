@@ -125,7 +125,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         socket.emit('UpdateAll')
     };
 
-    $scope.currentSort = 'heroStats[0].winPercentage';
+    $scope.currentSort =  'competitiveRank.competitive_rank';//'heroStats[0].winPercentage';
     $scope.currentSortPH = 'winPercentage';
     $scope.currentSortDir = '-';
     $scope.currentSortDirPH = '-';
