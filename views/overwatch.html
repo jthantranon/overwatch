@@ -98,17 +98,20 @@
         </td>
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
-                <span class="label label-primary">Primary</span>
-                {{entity.heroStats[0].avgGold | number:1}}
+                <span class="label label-warning">{{entity.heroStats[0].avgGold | number:1}}</span>
+
             </span> |
             <span ng-class="highlightHighest('avgSilver', entity.heroStats[0].avgSilver, entity.player.tags)">
-                {{entity.heroStats[0].avgSilver | number:1}}
+                <span class="label label-default">{{entity.heroStats[0].avgSilver | number:1}}</span>
+
             </span> |
             <span ng-class="highlightHighest('avgBronze', entity.heroStats[0].avgBronze, entity.player.tags)">
-                {{entity.heroStats[0].avgBronze | number:1}}
+                <span class="label label-danger">{{entity.heroStats[0].avgBronze | number:1}}</span>
+
             </span> |
             <span ng-class="highlightHighest('avgMedal', entity.heroStats[0].avgMedal, entity.player.tags)">
-                {{entity.heroStats[0].avgMedal | number:1}}
+                <span class="label label-primary">{{entity.heroStats[0].avgMedal | number:1}}</span>
+
             </span>
         </td>
         <td ng-class="highlightHighest('mostGameEliminations',  entity.careerStats[0].mostGameEliminations, entity.player.tags)">{{entity.careerStats[0].mostGameEliminations}}</td>
