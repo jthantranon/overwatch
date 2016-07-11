@@ -8,7 +8,7 @@ var Tools = COMMON.getInstance().tools;
 var socket = io();
 
 var app = angular.module("theApp", []).controller("theController", ["$scope","$http", "$log", "$location", function($scope, $http, $log, $location){
-    $location.path('/');
+    $location.path('/All');
     $scope.moment = moment;
     $scope.tableFilter = 'all';
     $scope.Tools = Tools;
@@ -98,13 +98,18 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
             $scope.highest[tag] = $scope.highest[tag] || {};
             $scope.highest[tag][type] = $scope.highest[tag][type] || 0;
             $scope.highest[tag][type] = value > $scope.highest[tag][type] ? value : $scope.highest[tag][type];
+            // if($scope.private){
+            //     $scope.private.highest = $scope.private.highest || {};
+            //     $scope.private.highest = $scope.highest;
+            // }
+
         }
         $scope.highest['all'][type] = $scope.highest['all'][type] || 0;
         $scope.highest['all'][type] = value > $scope.highest['all'][type] ? value : $scope.highest['all'][type];
         //if(!$scope.highest[decodeURIComponent($location.url().split('/')[1])]) return;
         var path = decodeURIComponent($location.url().split('/')[1]) || 'all';
         if(!$scope.highest[path]) return;
-        return $scope.highest[path][type] === value ? 'highlightHighest' : '';
+        return $scope.highest[path][type] == value ? 'highlightHighest' : '';
     };
 
     $scope.stdName = (name) => {
@@ -120,10 +125,18 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
         socket.emit('UpdateAll')
     };
 
-    $scope.currentSort = 'heroStats[0].winPercentage';
+    $scope.currentSort =  'competitiveRank.competitive_rank';//'heroStats[0].winPercentage';
+    $scope.currentSortPH = 'winPercentage';
     $scope.currentSortDir = '-';
+    $scope.currentSortDirPH = '-';
     $scope.changeSortDir = () => {
         $scope.currentSortDir = $scope.currentSortDir === '-'? '' : '-';
+    };
+    $scope.changeSortDirHero = () => {
+        $scope.currentSortDirHero = $scope.currentSortDirHero === '-'? '' : '-';
+    };
+    $scope.changeSortDirPH = () => {
+        $scope.currentSortDirPH = $scope.currentSortDirPH === '-'? '' : '-';
     };
     //$scope.filter = 'All';
 
@@ -158,6 +171,7 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
 
         State = msg;
         console.dir(msg);
+        $scope.Private.highest = $scope.highest;
         $scope.$apply();
     });
 }]);
@@ -171,30 +185,48 @@ app.filter('percentage', function() {
     };
 });
 
-app.filter('orderObjectBy', function() {
-    return function(items, fields, reverse) {
-        var filtered;
-        filtered = [];
-        angular.forEach(items, function(item) {
-            return filtered.push(item);
-        });
-        filtered.sort(function(a, b) {
-            var sifted_item_a, sifted_item_b;
-            sifted_item_a = a;
-            sifted_item_b = b;
-            angular.forEach(fields, function(field) {
-                sifted_item_a = sifted_item_a[field];
-                return sifted_item_b = sifted_item_b[field];
-            });
-            if (sifted_item_a > sifted_item_b) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
-        if (reverse) {
-            filtered.reverse();
+app.filter('orderObjectBy', function(){
+    return function(input, attribute) {
+        if (!angular.isObject(input)) return input;
+
+        var array = [];
+        for(var objectKey in input) {
+            array.push(input[objectKey]);
         }
-        return filtered;
-    };
+
+        array.sort(function(a, b){
+            a = parseInt(a[attribute]);
+            b = parseInt(b[attribute]);
+            return a - b;
+        });
+        return array;
+    }
 });
+
+// app.filter('orderObjectBy', function() {
+//     return function(items, fields, reverse) {
+//         var filtered;
+//         filtered = [];
+//         angular.forEach(items, function(item) {
+//             return filtered.push(item);
+//         });
+//         filtered.sort(function(a, b) {
+//             var sifted_item_a, sifted_item_b;
+//             sifted_item_a = a;
+//             sifted_item_b = b;
+//             angular.forEach(fields, function(field) {
+//                 sifted_item_a = sifted_item_a[field];
+//                 return sifted_item_b = sifted_item_b[field];
+//             });
+//             if (sifted_item_a > sifted_item_b) {
+//                 return 1;
+//             } else {
+//                 return -1;
+//             }
+//         });
+//         if (reverse) {
+//             filtered.reverse();
+//         }
+//         return filtered;
+//     };
+// });
