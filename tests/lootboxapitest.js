@@ -86,15 +86,21 @@ function parseData(dat){
                 dat.data.bestWinP = hero.name;
                 dat.data.bestWinPP = winP;
                 dat.data.bestWinPData = hero;
-            bestMinWinP = winP;
+                bestMinWinP = winP;
+            }
         }
     }
-}
-Data[dat.data.player.name] = dat.data;
+    Data[dat.data.player.name] = dat.data;
 }
 
+var renames = {
+    'Torbj&#xF6;rn': 'Torbjoern',
+    'L&#xFA;cio': 'Lucio',
+    'Soldier: 76': 'Soldier76',
+    'D.Va': 'DVa'
+};
 
-function getSimple(url,type,single){
+function getSimple(url,type,meta){
     function get(res){
         var body = '';
         res.on('data', function(chunk){
@@ -108,9 +114,27 @@ function getSimple(url,type,single){
             } catch (err){}
 
             if(dat){
-                console.log(dat);
-                if(type === 'overwatch' && dat.data && dat.data.heroStats) parseData(dat);
-                if(single) single(dat);
+                switch(type){
+                    case 'competitiveHeroes':
+                        for(var i in dat){
+                            var hero = dat[i];
+                            if(hero.playtime !== '--'){
+                                var hero = renames[hero.name] || hero.name;
+                                console.log(hero);
+                                getSimple('https://api.lootbox.eu/pc/us/JFTActual-1112/competitive-play/hero/' + hero + '/','competitiveHero',{
+                                    name: hero
+                                });
+                            }
+
+                        }
+                        break;
+                    case 'competitiveHero':
+                        console.log(meta.name,dat);
+                }
+                //console.log(dat);
+
+                //if(type === 'overwatch' && dat.data && dat.data.heroStats) parseData(dat);
+                //if(single) single(dat);
             }
         });
     }
@@ -128,4 +152,4 @@ function getSimple(url,type,single){
 
 }
 
-getSimple('https://api.lootbox.eu/pc/us/JFTActual-1112/competitive-play/heroes');
+getSimple('https://api.lootbox.eu/pc/us/JFTActual-1112/competitive-play/heroes','competitiveHeroes');
