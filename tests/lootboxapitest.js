@@ -27,6 +27,8 @@ firebase.initializeApp(config);
 
 var db = firebase.database();
 var ref = db.ref("/main");
+var refPlayers = db.ref("/players");
+var refUpdate = db.ref("/commands/update");
 
 var instance;
 var Data = {};
@@ -234,6 +236,27 @@ function getSimple(battletag,meta){
 //        battletag: battletag
 //    });
 //}
-getSimple('JFTActual-1112');
-getSimple('MadProphet-1298');
-getSimple('philoni-1112');
+// getSimple('JFTActual-1112');
+// getSimple('MadProphet-1298');
+// getSimple('philoni-1112');
+
+// refPlayers.once('value',(data)=>{
+//     var dat = data.val();
+//     for(var i in dat){
+//         // console.log(i);
+//     }
+// });
+var players = {};
+refPlayers.on('child_added',(data,prev)=>{
+    // var dat = data.val();
+    console.log(data.key);
+    getSimple(data.key);
+    players[data.key] = true;
+});
+
+refUpdate.on('value',(data)=>{
+    console.log(data.val());
+    for(var i in players){
+        getSimple(i);
+    }
+});
