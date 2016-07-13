@@ -26,7 +26,7 @@ var config = {
 firebase.initializeApp(config);
 
 var db = firebase.database();
-var ref = db.ref("/data");
+var ref = db.ref("/main");
 
 var instance;
 var Data = {};
@@ -100,7 +100,7 @@ var renames = {
     'D.Va': 'DVa'
 };
 
-function getSimple(url,type,meta){
+function getSimple(battletag,meta){
     function get(res){
         var body = '';
         res.on('data', function(chunk){
@@ -114,23 +114,79 @@ function getSimple(url,type,meta){
             } catch (err){}
 
             if(dat){
-                switch(type){
-                    case 'competitiveHeroes':
-                        for(var i in dat){
-                            var hero = dat[i];
-                            if(hero.playtime !== '--'){
-                                var hero = renames[hero.name] || hero.name;
-                                console.log(hero);
-                                getSimple('https://api.lootbox.eu/pc/us/JFTActual-1112/competitive-play/hero/' + hero + '/','competitiveHero',{
-                                    name: hero
-                                });
+                if(dat.GamesPlayed){
+                    console.log(battletag,meta,dat.GamesPlayed);
+                    ///// clean data
+                    ////////////////
+                    for(var i in dat){
+                        for(var j in renames){
+                            if(i.indexOf(j) > -1){
+                                dat[i.replace(j,renames[j])] = dat[i];
+                                delete dat[i];
                             }
-
                         }
-                        break;
-                    case 'competitiveHero':
-                        console.log(meta.name,dat);
+                    }
+                    ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
+                } else {
+                    function getHero(j){
+                        var hero = dat[j];
+                        if(hero.playtime !== '--'){
+                            var heroName = renames[hero.name] || hero.name;
+                            getSimple(battletag,{
+                                type: meta.type,
+                                hero: heroName
+                            });
+                        }
+                        setTimeout(()=>{
+                            if(j < dat.length-1){
+                                //j++;
+                                getHero(j+1);
+                            }
+                        },1)
+                    }
+                    getHero(0);
+
+                    //for(var i in dat){
+                    //    var hero = dat[i];
+                    //    if(hero.playtime !== '--'){
+                    //        var heroName = renames[hero.name] || hero.name;
+                    //        getSimple(battletag,{
+                    //            type: meta.type,
+                    //            hero: heroName
+                    //        });
+                    //    }
+                    //
+                    //}
                 }
+                //switch(type){
+                //    case 'competitiveHeroes':
+                //        for(var i in dat){
+                //            var hero = dat[i];
+                //            if(hero.playtime !== '--'){
+                //                var hero = renames[hero.name] || hero.name;
+                //                console.log(hero);
+                //                getSimple('https://api.lootbox.eu/pc/us/'+meta.battletag+'/competitive-play/hero/' + hero + '/','competitiveHero',{
+                //                    name: hero,
+                //                    battletag: meta.battletag
+                //                });
+                //            }
+                //
+                //        }
+                //        break;
+                //    case 'competitiveHero':
+                //        console.log(meta.name,dat);
+                //        ///// clean data
+                //        ////////////////
+                //        for(var i in dat){
+                //            for(var j in renames){
+                //                if(i.indexOf(j) > -1){
+                //                    dat[i.replace(j,renames[j])] = dat[i];
+                //                    delete dat[i];
+                //                }
+                //            }
+                //        }
+                //        ref.child(meta.battletag).child(meta.name).set(dat);
+                //}
                 //console.log(dat);
 
                 //if(type === 'overwatch' && dat.data && dat.data.heroStats) parseData(dat);
@@ -138,18 +194,35 @@ function getSimple(url,type,meta){
             }
         });
     }
-    try {
-        https.get(url, get).on('error', function(e){
-            console.log('wee');
-            console.log("Got an error: ", e);
-        });
 
-    } catch (err){
-        http.get(url, get).on('error', function(e){
-            console.log("Got an error: ", e);
+    if(!meta){
+        getSimple(battletag,{
+            type: 'quick'
+        });
+        getSimple(battletag,{
+            type: 'competitive'
+        })
+    } else {
+        var urlBase = 'https://api.lootbox.eu/pc/us/' + battletag + '/';
+        var urlType = urlBase + meta.type + '-play/';
+
+        var url;
+        if(meta.hero){
+            url = urlType + 'hero' + '/' + meta.hero + '/';
+        } else {
+            url = urlType + 'heroes';
+        }
+
+        //console.log(url);
+        https.get(url, get).on('error', function(e){
+            console.log(url,"Got an error: ", e);
         });
     }
-
 }
 
-getSimple('https://api.lootbox.eu/pc/us/JFTActual-1112/competitive-play/heroes','competitiveHeroes');
+//function getPlayerData(battletag){
+//    getSimple('https://api.lootbox.eu/pc/us/'+battletag+'/competitive-play/heroes','competitiveHeroes',{
+//        battletag: battletag
+//    });
+//}
+getSimple('JFTActual-1112');
