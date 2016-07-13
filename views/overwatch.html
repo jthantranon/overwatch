@@ -73,43 +73,64 @@
             {{p.profile.level}}
         </td>
         <td title={{entity.heroStats[0].edr}} ng-class="highlightHighest('edr', entity.heroStats[0].edr, entity.player.tags)">
-            Q: {{edr(p.quick) | number:2}}<br>
-            C: {{edr(p.competitive) | number:2}}
+            Q: {{p.quick.All._edr | number:2}}<br>
+            C: {{p.competitive.All._edr | number:2}}
         </td>
         <td ng-class="highlightHighest('kdr', entity.heroStats[0].kdr, entity.player.tags)">
-            Q: {{kdr(p.quick) | number:2}}<br>
-            C: {{kdr(p.competitive) | number:2}}
+            {{p.quick.All._kdr | number:2}}<br>
+            {{p.competitive.All._kdr | number:2}}
         </td>
         <td ng-class="highlightHighest('winPercentage', entity.heroStats[0].winPercentage, entity.player.tags)">
-            {{entity.heroStats[0].winPercentage | percentage:100}}
+            {{p.quick.All._win | percentage:100}}<br>
+            {{p.competitive.All._win | percentage:100}}
         </td>
         <td ng-class="highlightHighest('gamesUp', entity.heroStats[0].gamesUp, entity.player.tags)" title="{{entity.heroStats[0].gamesWon}} - {{entity.heroStats[0].gamesPlayed - entity.heroStats[0].gamesWon}}">
-            {{entity.heroStats[0].gamesUp}}
+            {{p.quick.All._winsOff}}<br>
+            {{p.competitive.All._winsOff}}
         </td>
         <td ng-class="highlightHighest('killsUp', entity.heroStats[0].killsUp, entity.player.tags)" title="{{entity.heroStats[0].finalBlows}} / {{entity.heroStats[0].deaths}} / {{entity.heroStats[0].assists}}">
-            {{entity.heroStats[0].killsUp}}
+            {{p.quick.All._blowsOff}}<br>
+            {{p.competitive.All._blowsOff}}
         </td>
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
-                <span class="label label-warning">{{entity.heroStats[0].avgGold | number:1}}</span>
-
+                <span class="label label-warning">{{p.quick.All._averageGold | number:1}}</span>
             </span> |
             <span ng-class="highlightHighest('avgSilver', entity.heroStats[0].avgSilver, entity.player.tags)">
-                <span class="label label-default">{{entity.heroStats[0].avgSilver | number:1}}</span>
-
+                <span class="label label-default">{{p.quick.All._averageSilver | number:1}}</span>
             </span> |
             <span ng-class="highlightHighest('avgBronze', entity.heroStats[0].avgBronze, entity.player.tags)">
-                <span class="label label-danger">{{entity.heroStats[0].avgBronze | number:1}}</span>
-
+                <span class="label label-danger">{{p.quick.All._averageBronze | number:1}}</span>
             </span> |
             <span ng-class="highlightHighest('avgMedal', entity.heroStats[0].avgMedal, entity.player.tags)">
-                <span class="label label-primary">{{entity.heroStats[0].avgMedal | number:1}}</span>
-
+                <span class="label label-primary">{{p.quick.All._averageMedals | number:1}}</span>
+            </span>
+            <br>
+            <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
+                <span class="label label-warning">{{p.competitive.All._averageGold | number:1}}</span>
+            </span> |
+            <span ng-class="highlightHighest('avgSilver', entity.heroStats[0].avgSilver, entity.player.tags)">
+                <span class="label label-default">{{p.competitive.All._averageSilver | number:1}}</span>
+            </span> |
+            <span ng-class="highlightHighest('avgBronze', entity.heroStats[0].avgBronze, entity.player.tags)">
+                <span class="label label-danger">{{p.competitive.All._averageBronze | number:1}}</span>
+            </span> |
+            <span ng-class="highlightHighest('avgMedal', entity.heroStats[0].avgMedal, entity.player.tags)">
+                <span class="label label-primary">{{p.competitive.All._averageMedals | number:1}}</span>
             </span>
         </td>
-        <td ng-class="highlightHighest('mostGameEliminations',  p.competitive.All['Eliminations-MostinGame'], entity.player.tags)">{{p.competitive.All['Eliminations-MostinGame']}}</td>
-        <td ng-class="highlightHighest('mostGameDamageDone',  entity.careerStats[0].mostGameDamageDone, entity.player.tags)">{{entity.careerStats[0].mostGameDamageDone}}</td>
-        <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
+        <td ng-class="highlightHighest('mostGameEliminations',  p.competitive.All['Eliminations-MostinGame'], entity.player.tags)">
+            {{p.quick.All['Eliminations-MostinGame']}}<br>
+            {{p.competitive.All['Eliminations-MostinGame']}}
+        </td>
+        <td ng-class="highlightHighest('mostGameDamageDone',  entity.careerStats[0].mostGameDamageDone, entity.player.tags)">
+            {{p.quick.All['DamageDone-MostinGame']}}<br>
+            {{p.competitive.All['DamageDone-MostinGame']}}
+        </td>
+        <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">
+            {{p.quick.All['HealingDone-MostinGame']}}<br>
+            {{p.competitive.All['HealingDone-MostinGame']}}
+        </td>
         <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
         <!--<td class="profileLink">{{entity.player.lastUpdated}}</td>-->
         <td class="charbg" ng-class="highlightHighest('mostPlayedWP', entity.mostPlayedWP, entity.player.tags)">

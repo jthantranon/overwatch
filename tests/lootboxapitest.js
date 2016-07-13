@@ -100,6 +100,37 @@ var renames = {
     'D.Va': 'DVa'
 };
 
+function statify(str){
+    return typeof str === 'string' ? parseInt(str.replace(/,/g, "")) : str;
+}
+
+function derive(dat){
+    var deaths = statify(dat.Deaths),
+        gamesWon = statify(dat.GamesWon),
+        gamesPlayed = statify(dat.GamesPlayed),
+        gamesLost = gamesPlayed - gamesWon,
+        finalBlows = statify(dat.FinalBlows),
+        bronze = statify(dat['Medals-Bronze']),
+        silver = statify(dat['Medals-Silver']),
+        gold = statify(dat['Medals-Gold']),
+        medals = statify(dat.Medals);
+
+    if(deaths > 0){
+        dat._edr = statify(dat.Eliminations) / deaths;
+        dat._kdr = finalBlows / deaths;
+    }
+    dat._win = gamesWon / gamesPlayed;
+    dat._gamesLost = gamesLost;
+    dat._winsOff = gamesWon - gamesLost;
+    dat._blowsOff = finalBlows - deaths;
+    dat._averageBronze = bronze / gamesPlayed;
+    dat._averageSilver = silver / gamesPlayed;
+    dat._averageGold = gold / gamesPlayed;
+    dat._averageMedals = medals / gamesPlayed;
+
+    return dat;
+}
+
 function getSimple(battletag,meta){
     function get(res){
         var body = '';
@@ -118,7 +149,7 @@ function getSimple(battletag,meta){
                     console.log(battletag,dat.data);
                     dat.data.battletag = battletag;
                     ref.child(battletag).child(meta.type).set(dat.data);
-                } else if(dat.GamesPlayed){
+                } else if(dat.GamesPlayed > 0){
                     console.log(battletag,meta,dat.GamesPlayed);
                     ///// clean data
                     ////////////////
@@ -130,6 +161,7 @@ function getSimple(battletag,meta){
                             }
                         }
                     }
+                    dat = derive(dat);
                     ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
                 } else {
                     getSimple(battletag,{
@@ -138,7 +170,7 @@ function getSimple(battletag,meta){
                     });
                     function getHero(j){
                         var hero = dat[j];
-                        if(hero.playtime !== '--'){
+                        if(hero.GamesPlayed > 0){
                             var heroName = renames[hero.name] || hero.name;
                             getSimple(battletag,{
                                 type: meta.type,
