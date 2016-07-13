@@ -138,6 +138,13 @@ var app = angular.module("theApp", []).controller("theController", ["$scope","$h
     $scope.changeSortDirPH = () => {
         $scope.currentSortDirPH = $scope.currentSortDirPH === '-'? '' : '-';
     };
+
+    $scope.edr = function(p){
+        return (parseInt(p.All.Eliminations.replace(/,/g, "")) / parseInt(p.All.Deaths.replace(/,/g, "")));
+    };
+    $scope.kdr = function(p){
+        return (parseInt(p.All.FinalBlows.replace(/,/g, "")) / parseInt(p.All.Deaths.replace(/,/g, "")));
+    };
     //$scope.filter = 'All';
 
     $scope.getModel = function(model){

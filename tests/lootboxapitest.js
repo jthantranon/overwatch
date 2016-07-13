@@ -114,7 +114,11 @@ function getSimple(battletag,meta){
             } catch (err){}
 
             if(dat){
-                if(dat.GamesPlayed){
+                if(meta.type === 'profile'){
+                    console.log(battletag,dat.data);
+                    dat.data.battletag = battletag;
+                    ref.child(battletag).child(meta.type).set(dat.data);
+                } else if(dat.GamesPlayed){
                     console.log(battletag,meta,dat.GamesPlayed);
                     ///// clean data
                     ////////////////
@@ -128,6 +132,10 @@ function getSimple(battletag,meta){
                     }
                     ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
                 } else {
+                    getSimple(battletag,{
+                        type: meta.type,
+                        hero: 'All'
+                    });
                     function getHero(j){
                         var hero = dat[j];
                         if(hero.playtime !== '--'){
@@ -145,52 +153,7 @@ function getSimple(battletag,meta){
                         },1)
                     }
                     getHero(0);
-
-                    //for(var i in dat){
-                    //    var hero = dat[i];
-                    //    if(hero.playtime !== '--'){
-                    //        var heroName = renames[hero.name] || hero.name;
-                    //        getSimple(battletag,{
-                    //            type: meta.type,
-                    //            hero: heroName
-                    //        });
-                    //    }
-                    //
-                    //}
                 }
-                //switch(type){
-                //    case 'competitiveHeroes':
-                //        for(var i in dat){
-                //            var hero = dat[i];
-                //            if(hero.playtime !== '--'){
-                //                var hero = renames[hero.name] || hero.name;
-                //                console.log(hero);
-                //                getSimple('https://api.lootbox.eu/pc/us/'+meta.battletag+'/competitive-play/hero/' + hero + '/','competitiveHero',{
-                //                    name: hero,
-                //                    battletag: meta.battletag
-                //                });
-                //            }
-                //
-                //        }
-                //        break;
-                //    case 'competitiveHero':
-                //        console.log(meta.name,dat);
-                //        ///// clean data
-                //        ////////////////
-                //        for(var i in dat){
-                //            for(var j in renames){
-                //                if(i.indexOf(j) > -1){
-                //                    dat[i.replace(j,renames[j])] = dat[i];
-                //                    delete dat[i];
-                //                }
-                //            }
-                //        }
-                //        ref.child(meta.battletag).child(meta.name).set(dat);
-                //}
-                //console.log(dat);
-
-                //if(type === 'overwatch' && dat.data && dat.data.heroStats) parseData(dat);
-                //if(single) single(dat);
             }
         });
     }
@@ -201,16 +164,30 @@ function getSimple(battletag,meta){
         });
         getSimple(battletag,{
             type: 'competitive'
-        })
+        });
+        getSimple(battletag,{
+            type: 'profile'
+        });
     } else {
         var urlBase = 'https://api.lootbox.eu/pc/us/' + battletag + '/';
-        var urlType = urlBase + meta.type + '-play/';
+        var urlPreType = urlBase + meta.type;
+        var urlType = urlPreType + '-play/';
 
         var url;
         if(meta.hero){
-            url = urlType + 'hero' + '/' + meta.hero + '/';
+            if(meta.hero === 'All'){
+                url = urlType + 'allHeroes/'
+            } else {
+                url = urlType + 'hero' + '/' + meta.hero + '/';
+            }
+
+        } else if(meta.type === 'profile'){
+            url = urlPreType;
         } else {
             url = urlType + 'heroes';
+            // https.get(urlType + 'allHeroes', get).on('error', function(e){
+            //     console.log(urlType,"Got an error: ", e);
+            // });
         }
 
         //console.log(url);
@@ -226,3 +203,5 @@ function getSimple(battletag,meta){
 //    });
 //}
 getSimple('JFTActual-1112');
+getSimple('MadProphet-1298');
+getSimple('philoni-1112');

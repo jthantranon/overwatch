@@ -1,14 +1,9 @@
 <h2 class="title">-------- {{decodeURIComponent($location.url().split('/')[1]) || 'All'}} --------</h2>
 <span class="filter">
     Filter:
-    <!--<span class="clickable" ng-click="$location.path('')">All</span> |-->
     <span ng-repeat="(tag,data) in Private.tagsData">
         <span class="clickable" ng-click="$location.path('/'+tag)">{{tag}}</span> |
     </span>
-    <!--<span class="clickable" ng-click="$location.path('')">All</span> |-->
-    <!--<span class="clickable" ng-click="$location.path('/Gamblit')">Gamblit</span> |-->
-    <!--<span class="clickable" ng-click="$location.path('/JFT Friends')">JFT Friends</span> |-->
-    <!--<span class="clickable" ng-click="$location.path('/Winky')">Winky</span>-->
 </span>
 <table class="table table-inverse">
     <tbody>
@@ -35,6 +30,107 @@
     </tbody>
 </table>
 <span ng-click="addTag()">+Add</span>
+
+<table class="table table-inverse newtab">
+    <thead>
+    <tr ng-click="changeSortDir()" class="headings">
+        <th ng-click="currentSort = 'profile.battletag'">BattleTag / Name</th>
+        <th ng-click="currentSort = 'profile.competitive.rank'">Rank</th>
+        <th ng-click="currentSort = 'profile.level'">Level</th>
+        <th title="Elimination/Death Ratio" ng-click="currentSort = 'heroStats[0].edr'">EDR</th>
+        <th title="Kill/Death Ratio (not counting assists)" ng-click="currentSort = 'heroStats[0].kdr'">KDR</th>
+        <th title="Win Percentage" ng-click="currentSort = 'heroStats[0].winPercentage'">Win %</th>
+        <th title="Wins above .500" ng-click="currentSort = 'heroStats[0].gamesUp'">+/- Wins</th>
+        <th title="Kills above .500" ng-click="currentSort = 'heroStats[0].killsUp'">+/- Kills</th>
+        <th title="Average Medals Per Game Gold/Silver/Bronze/Toal" ng-click="currentSort = 'heroStats[0].avgMedal'">Avg Medals/Game (G/S/B/T)</th>
+        <th title="Most elims in a single game" ng-click="currentSort = 'careerStats[0].mostGameEliminations'">Most Elims/Game</th>
+        <th title="Most damage in a single game" ng-click="currentSort = 'careerStats[0].mostGameDamageDone'">Most Dmg/Game</th>
+        <th title="Most healing in a single game" ng-click="currentSort = 'careerStats[0].mostGameHealingDone'">Most Heals/Game</th>
+        <th title="Achievements"  ng-click="currentSort = 'achievements.length'">Cheevies</th>
+        <th ng-click="currentSort = 'mostPlayedWP'">Most Played</th>
+        <th ng-click="currentSort = 'secondMostPlayedWP'">2nd Most Played</th>
+        <th ng-click="currentSort = 'bestWinPP'">Best Win %</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-hide="$location.url() !== '' && $location.url() !== '/' && entity.player.tags.indexOf(decodeURIComponent($location.url().split('/')[1])) < 0"
+        ng-repeat="p in Private.mainA | orderBy: currentSortDir+currentSort">
+        <th>
+            <img class="portrait" ng-src="{{p.profile.avatar}}">
+            {{p.profile.username}}<br>
+            <div class="realName">{{p.profile.battletag}}</div>
+            <span class="profileLink" >
+                <!--Profiles:-->
+                <a target="_blank" href="{{'https://watcher.gg/profile/pc/us/'+p.profile.battletag.split('-')[0]+'%23'+p.profile.battletag.split('-')[1]}}">watcher</a> |
+                <a target="_blank" href="{{'https://playoverwatch.com/en-us/career/pc/us/'+p.profile.battletag}}">bnet</a> |
+                <a target="_blank" ng-click="addGroup(p.profile.battletag)">+group</a>
+            </span>
+        </th>
+        <td ng-class="highlightHighest('rank', p.profile.competitive.rank, entity.player.tags)">
+            {{p.profile.competitive.rank}}
+        </td>
+        <td ng-class="highlightHighest('level', p.profile.level, entity.player.tags)">
+            {{p.profile.level}}
+        </td>
+        <td title={{entity.heroStats[0].edr}} ng-class="highlightHighest('edr', entity.heroStats[0].edr, entity.player.tags)">
+            Q: {{edr(p.quick) | number:2}}<br>
+            C: {{edr(p.competitive) | number:2}}
+        </td>
+        <td ng-class="highlightHighest('kdr', entity.heroStats[0].kdr, entity.player.tags)">
+            Q: {{kdr(p.quick) | number:2}}<br>
+            C: {{kdr(p.competitive) | number:2}}
+        </td>
+        <td ng-class="highlightHighest('winPercentage', entity.heroStats[0].winPercentage, entity.player.tags)">
+            {{entity.heroStats[0].winPercentage | percentage:100}}
+        </td>
+        <td ng-class="highlightHighest('gamesUp', entity.heroStats[0].gamesUp, entity.player.tags)" title="{{entity.heroStats[0].gamesWon}} - {{entity.heroStats[0].gamesPlayed - entity.heroStats[0].gamesWon}}">
+            {{entity.heroStats[0].gamesUp}}
+        </td>
+        <td ng-class="highlightHighest('killsUp', entity.heroStats[0].killsUp, entity.player.tags)" title="{{entity.heroStats[0].finalBlows}} / {{entity.heroStats[0].deaths}} / {{entity.heroStats[0].assists}}">
+            {{entity.heroStats[0].killsUp}}
+        </td>
+        <td>
+            <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
+                <span class="label label-warning">{{entity.heroStats[0].avgGold | number:1}}</span>
+
+            </span> |
+            <span ng-class="highlightHighest('avgSilver', entity.heroStats[0].avgSilver, entity.player.tags)">
+                <span class="label label-default">{{entity.heroStats[0].avgSilver | number:1}}</span>
+
+            </span> |
+            <span ng-class="highlightHighest('avgBronze', entity.heroStats[0].avgBronze, entity.player.tags)">
+                <span class="label label-danger">{{entity.heroStats[0].avgBronze | number:1}}</span>
+
+            </span> |
+            <span ng-class="highlightHighest('avgMedal', entity.heroStats[0].avgMedal, entity.player.tags)">
+                <span class="label label-primary">{{entity.heroStats[0].avgMedal | number:1}}</span>
+
+            </span>
+        </td>
+        <td ng-class="highlightHighest('mostGameEliminations',  p.competitive.All['Eliminations-MostinGame'], entity.player.tags)">{{p.competitive.All['Eliminations-MostinGame']}}</td>
+        <td ng-class="highlightHighest('mostGameDamageDone',  entity.careerStats[0].mostGameDamageDone, entity.player.tags)">{{entity.careerStats[0].mostGameDamageDone}}</td>
+        <td ng-class="highlightHighest('mostGameHealingDone',  entity.careerStats[0].mostGameHealingDone, entity.player.tags)">{{entity.careerStats[0].mostGameHealingDone}}</td>
+        <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
+        <!--<td class="profileLink">{{entity.player.lastUpdated}}</td>-->
+        <td class="charbg" ng-class="highlightHighest('mostPlayedWP', entity.mostPlayedWP, entity.player.tags)">
+            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
+            {{entity.mostPlayed}}<br>
+            {{entity.mostPlayedData.gamesWon}}/{{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}} ({{entity.mostPlayedWP | percentage:100}})
+        </td>
+        <td class="charbg" ng-class="highlightHighest('secondMostPlayedWP', entity.secondMostPlayedWP, entity.player.tags)">
+            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.secondMostPlayed) +'/overlay-portrait.png'}}">
+            {{entity.secondMostPlayed}}<br>
+            {{entity.secondMostPlayedData.gamesWon}}/{{entity.secondMostPlayedData.gamesPlayed - entity.secondMostPlayedData.gamesWon}} ({{entity.secondMostPlayedWP | percentage:100}})
+        </td>
+        <td class="charbg" ng-class="highlightHighest('bestWinPP', entity.bestWinPP, entity.player.tags)">
+            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.bestWinP) +'/overlay-portrait.png'}}">
+            {{entity.bestWinP}}<br>
+            {{entity.bestWinPData.gamesWon}}/{{entity.bestWinPData.gamesPlayed - entity.bestWinPData.gamesWon}} ({{entity.bestWinPP | percentage:100}})
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 <table class="table table-inverse newtab">
     <thead>
     <tr ng-click="changeSortDir()" class="headings">
@@ -106,7 +202,7 @@
         <td ng-class="highlightHighest('killsUp', entity.heroStats[0].killsUp, entity.player.tags)" title="{{entity.heroStats[0].finalBlows}} / {{entity.heroStats[0].deaths}} / {{entity.heroStats[0].assists}}">
             {{entity.heroStats[0].killsUp}}
         </td>
->>>>>>> 81c3a268d64c5ff0e700f6ccf79fe76b41d8ab78
+<!--&gt;>>>>>> 81c3a268d64c5ff0e700f6ccf79fe76b41d8ab78-->
         <td>
             <span ng-class="highlightHighest('avgGold', entity.heroStats[0].avgGold, entity.player.tags)">
                 <span class="label label-warning">{{entity.heroStats[0].avgGold | number:1}}</span>
