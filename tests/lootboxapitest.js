@@ -99,7 +99,8 @@ var renames = {
     'Torbj&#xF6;rn': 'Torbjoern',
     'L&#xFA;cio': 'Lucio',
     'Soldier: 76': 'Soldier76',
-    'D.Va': 'DVa'
+    'D.Va': 'DVa',
+    'overwatch.guid.': 'overwatchGuid'
 };
 
 function statify(str){
@@ -146,12 +147,12 @@ function getSimple(battletag,meta){
                 dat = JSON.parse(body);
             } catch (err){}
 
-            if(dat){
+            if(dat && dat !== {}){
                 if(meta.type === 'profile'){
                     console.log(battletag,dat.data);
                     dat.data.battletag = battletag;
                     ref.child(battletag).child(meta.type).set(dat.data);
-                } else if(dat.GamesPlayed > 0){
+                } else if(statify(dat.GamesPlayed) > 0){
                     console.log(battletag,meta,dat.GamesPlayed);
                     ///// clean data
                     ////////////////
@@ -164,6 +165,7 @@ function getSimple(battletag,meta){
                         }
                     }
                     dat = derive(dat);
+                    // console.log(battletag,meta,dat);
                     ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
                 } else {
                     getSimple(battletag,{
@@ -172,7 +174,7 @@ function getSimple(battletag,meta){
                     });
                     function getHero(j){
                         var hero = dat[j];
-                        if(hero.GamesPlayed > 0){
+                        if(hero && hero.GamesPlayed > 0){
                             var heroName = renames[hero.name] || hero.name;
                             getSimple(battletag,{
                                 type: meta.type,
@@ -184,7 +186,7 @@ function getSimple(battletag,meta){
                                 //j++;
                                 getHero(j+1);
                             }
-                        },1)
+                        },5)
                     }
                     getHero(0);
                 }
