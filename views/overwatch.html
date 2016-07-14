@@ -134,9 +134,9 @@
         <td ng-class="highlightHighest('achievements',  entity.achievements.length, entity.player.tags)">{{entity.achievements.length}}</td>
         <!--<td class="profileLink">{{entity.player.lastUpdated}}</td>-->
         <td class="charbg" ng-class="highlightHighest('mostPlayedWP', entity.mostPlayedWP, entity.player.tags)">
-            <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">
-            {{entity.mostPlayed}}<br>
-            {{entity.mostPlayedData.gamesWon}}/{{entity.mostPlayedData.gamesPlayed - entity.mostPlayedData.gamesWon}} ({{entity.mostPlayedWP | percentage:100}})
+            <!--<img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.mostPlayed) +'/overlay-portrait.png'}}">-->
+            {{p.quick.meta._mostPlayed.hero}}<br>
+            {{p.competitive.meta._mostPlayed.hero}}
         </td>
         <td class="charbg" ng-class="highlightHighest('secondMostPlayedWP', entity.secondMostPlayedWP, entity.player.tags)">
             <img class="character" ng-src="{{'https://d1u1mce87gyfbn.cloudfront.net/hero/'+ stdName(entity.secondMostPlayed) +'/overlay-portrait.png'}}">

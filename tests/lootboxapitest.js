@@ -33,6 +33,8 @@ var refUpdate = db.ref("/commands/update");
 var instance;
 var Data = {};
 
+var LOCAL = {};
+
 function extraStats(container){
     container.gamesUp = (container.gamesWon - (container.gamesPlayed/2))*2;
     container.kdr = container.finalBlows/container.deaths;
@@ -104,7 +106,7 @@ var renames = {
 };
 
 function statify(str){
-    return typeof str === 'string' ? parseInt(str.replace(/,/g, "")) : str;
+    return typeof str === 'string' ? parseInt(str.replace(/,/g, "")) : str || 0;
 }
 
 function derive(dat){
@@ -135,6 +137,7 @@ function derive(dat){
 }
 
 function getSimple(battletag,meta){
+    // console.log('gs',meta);
     function get(res){
         var body = '';
         res.on('data', function(chunk){
@@ -148,12 +151,12 @@ function getSimple(battletag,meta){
             } catch (err){}
 
             if(dat && dat !== {}){
-                if(meta.type === 'profile'){
-                    console.log(battletag,dat.data);
+                if(meta.type === 'profile'){ // if profile
+                    // console.log(battletag,dat.data);
                     dat.data.battletag = battletag;
                     ref.child(battletag).child(meta.type).set(dat.data);
-                } else if(statify(dat.GamesPlayed) > 0){
-                    console.log(battletag,meta,dat.GamesPlayed);
+                } else if(statify(dat.GamesPlayed) > 0){ // if hero or all
+                    // console.log(battletag,meta,dat.GamesPlayed);
                     ///// clean data
                     ////////////////
                     for(var i in dat){
@@ -166,15 +169,40 @@ function getSimple(battletag,meta){
                     }
                     dat = derive(dat);
                     // console.log(battletag,meta,dat);
-                    ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
-                } else {
+                    // console.log(meta.hero);
+                    if(meta.hero !== 'All'){
+                        ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
+                        LOCAL[battletag][meta.type]['All']['_mostPlayed'] = LOCAL[battletag][meta.type]['All']['_mostPlayed'] || {
+                                hero: '',
+                                games: 0
+                            };
+                        var meta = LOCAL[battletag][meta.type]['_meta'] || {
+                                _mostPlayed: {},
+                                _secondMostPlayed: {}
+                            }
+                        var _mostPlayed = meta
+                        if(LOCAL[battletag][meta.type]['All']['_mostPlayed'].games < statify(dat.GamesPlayed)){
+                            console.log(battletag,meta.type,LOCAL[battletag][meta.type]['All']['_mostPlayed'],'vs',meta.hero,statify(dat.GamesPlayed));
+                            LOCAL[battletag][meta.type]['All']['_mostPlayed']['games'] = statify(dat.GamesPlayed);
+                            LOCAL[battletag][meta.type]['All']['_mostPlayed']['hero'] = meta.hero;
+                            ref.child(battletag).child(meta.type).child('meta/_mostPlayed').set(LOCAL[battletag][meta.type]['All']['_mostPlayed']);
+                        }
+
+                    } else {
+                        ref.child(battletag).child(meta.type).child(meta.hero).set(dat);
+                    }
+                    // console.log(LOCAL);
+                } else { // if not profile or hero or all
+                    // console.log(battletag,meta);
                     getSimple(battletag,{
                         type: meta.type,
                         hero: 'All'
                     });
                     function getHero(j){
                         var hero = dat[j];
-                        if(hero && hero.GamesPlayed > 0){
+
+                        if(hero && hero.playtime !== '--'){
+                            // console.log(battletag,meta,dat.length,j,hero.name,hero.playtime);
                             var heroName = renames[hero.name] || hero.name;
                             getSimple(battletag,{
                                 type: meta.type,
@@ -186,7 +214,7 @@ function getSimple(battletag,meta){
                                 //j++;
                                 getHero(j+1);
                             }
-                        },5)
+                        },500)
                     }
                     getHero(0);
                 }
@@ -195,6 +223,11 @@ function getSimple(battletag,meta){
     }
 
     if(!meta){
+        LOCAL[battletag] = LOCAL[battletag] || {};
+        LOCAL[battletag]['quick'] = LOCAL[battletag]['quick'] || {};
+        LOCAL[battletag]['quick']['All'] = LOCAL[battletag]['quick']['All'] || {};
+        LOCAL[battletag]['competitive'] = LOCAL[battletag]['competitive'] || {};
+        LOCAL[battletag]['competitive']['All'] = LOCAL[battletag]['competitive']['All'] || {};
         getSimple(battletag,{
             type: 'quick'
         });
@@ -210,6 +243,7 @@ function getSimple(battletag,meta){
         var urlType = urlPreType + '-play/';
 
         var url;
+        // console.log(battletag,meta);
         if(meta.hero){
             if(meta.hero === 'All'){
                 url = urlType + 'allHeroes/'
@@ -227,6 +261,7 @@ function getSimple(battletag,meta){
         }
 
         //console.log(url);
+        // console.log(battletag,url);
         https.get(url, get).on('error', function(e){
             console.log(url,"Got an error: ", e);
         });
@@ -249,16 +284,39 @@ function getSimple(battletag,meta){
 //     }
 // });
 var players = {};
+// function getHero(j){
+//     var simple = dat[j];
+//
+//     getSimple();
+//     setTimeout(()=>{
+//         if(j < dat.length-1){
+//             //j++;
+//             getHero(j+1);
+//         }
+//     },500)
+// }
+// getHero(0);
+
 refPlayers.on('child_added',(data,prev)=>{
     // var dat = data.val();
-    console.log(data.key);
+    // console.log(data.key);
     getSimple(data.key);
+    // getPlayer(data.key)
     players[data.key] = true;
 });
 
 refUpdate.on('value',(data)=>{
-    console.log(data.val());
-    for(var i in players){
-        getSimple(i);
+    // console.log(data.val());
+    if(data.val()){
+        console.log('updating...');
+        for(var i in players){
+            getSimple(i);
+        }
     }
+
 });
+
+// function getPlayer(battletag){
+//     console.log(battletag);
+//     getPrimaryData(battlet)
+// }
